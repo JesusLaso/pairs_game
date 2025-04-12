@@ -1,0 +1,32 @@
+.page{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.grid{
+    width: 50em;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(4,1fr);
+    grid-template-rows: repeat(3,1fr);
+    &.medium{
+        grid-template-columns: repeat(6,1fr);
+        grid-template-rows: repeat(5,1fr);
+    }
+    &.hard{
+        grid-template-columns: repeat(8,1fr);
+        grid-template-rows: repeat(7,1fr);
+    }
+}
+.box{
+    height: 100px;
+}
+.hidden{
+    display: none;
+}
+.active{
+    transform: scale(1.04);
+}
+.black{
+    background-color: black!important;
+}
