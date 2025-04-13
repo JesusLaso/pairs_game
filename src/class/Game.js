@@ -9,8 +9,9 @@ class Game {
         this.user;
         this.difficulty;
         this.active;
-        this.numCorrects;
+        this.numCorrects = 0;
         this.currentScore = 0;
+        this.numBoxes = 0;
         this.timeoutID = null;
         this.currentTime;
 
@@ -64,7 +65,7 @@ class Game {
         this.radioBtns.forEach((radio)=>{
             radio.addEventListener('change', (event)=>{
                 this.difficulty = event.target.value;
-                this.gameBox.generateBoard(this.difficulty)
+                this.numBoxes = this.gameBox.generateBoard(this.difficulty)
             })
         })
 
@@ -93,14 +94,11 @@ class Game {
         // Marcador de puntuacion
         this.scoreSpan = document.querySelector('.score')
 
-        // Contenedor de los botones del juego 
-        this.gameBtns = document.querySelector('.game__btns')
-
         // Boton reiniciar partida
         this.restartBtn = document.querySelector('.btn--restart')
         this.restartBtn.addEventListener('click', () => this.restartGame())
 
-        // Boton cambir dificultad
+        // Boton cambiar dificultad
         this.changeDifficultyBtn = document.querySelector('.btn--change')
         
         this.changeDifficultyBtn.addEventListener('click', () =>{
@@ -114,53 +112,99 @@ class Game {
         
         // Menu de pausa 
         this.pausedMenu = document.querySelector('.game__paused')
-
+        
         this.pauseGameBoton = document.querySelector('.btn--pause')
         this.pauseGameBoton.addEventListener('click', ()=> this.pausedGameMenu('pause'))
 
         this.backBtnPause = document.querySelector('.back__btn--pause')
+
+        // Menu de victoria 
+        this.gameWon = document.querySelector('.game__won')
+        this.victoryMenu = document.querySelector('.container__victory')
+
+        // ELEMENTOS DE RESULTADOS 
+
+        // Titulo de victoria 
+        this.victoryTitleSpan = document.querySelector('.victory__titlespan')
+
+        // Spans donde iran el resultado del usuario
+        this.resultScoreSpan = document.querySelector('.result--score')
+        this.resulTimeSpan = document.querySelector('.result--time')
+        this.resultDifficultySpan = document.querySelector('.result--difficulty')
+
+        // Botones de la pantalla de resultado
+        this.victoryNewGameBtn = document.querySelector('.victory--newgame')
+        this.victoryNewGameBtn.addEventListener('click', () =>{
+            this.difficultyContainer.classList.toggle('hidden')
+            this.backBtnDifficulty.classList.add('hidden')
+        })
+
+        this.victorySaveScoreBtn = document.querySelector('.victory--savescore')
+        this.victorySaveScoreBtn.addEventListener('click',() => this.storeUserData())
     }
+
 
     signUp(){
 
-        this.user = prompt('Introduce tu nombre de usuario');
+        let newUser = prompt('Introduce tu nombre de usuario');
+
+        if (!newUser) return;
 
         this.usersData = this.usersData || {};
 
-        this.usersData[this.user] = {
+        if (this.usersData[newUser]) {
+            alert('Ese nombre de usuario ya existe');
+            return;
+        }
+
+        this.usersData[newUser] = {
             highestScore: {
                 easy: 0,
                 medium: 0,
                 hard: 0,
             },
             fastestTime: {
-                easy: 0,
-                medium: 0,
-                hard: 0,
+                easy: '0:0',
+                medium: '0:0',
+                hard: '0:0',
             }
         }
         localStorage.setItem("users", JSON.stringify(this.usersData));
+
+        this.logIn(newUser);
     }
 
-    logIn(){
+    logIn(userFromSignUp = null){
         
         if(this.user){
             alert('Ya estas logueado')
             return
         }
 
-        let userName = prompt('Ingresa tu nombre de usuario')
+        let userName = userFromSignUp || prompt('Ingresa tu nombre de usuario');
+
+        if (!this.usersData[userName]) {
+            alert('Este nombre de usuario no existe');
+            return;
+        }
 
         if(!this.usersData[userName]){
             alert('Este nombre de usuario no existe')
             return
-        }else{
-            this.user = userName
         }
+
+        this.user = userName;
 
         let welcomeMessage = document.createElement('h2')
         welcomeMessage.classList.add('welcome__message')
-        welcomeMessage.innerHTML = `Bienvenido ${this.user}`
+        welcomeMessage.innerHTML = `Bienvenido `
+
+        let welcomeSpan = document.createElement('span')
+        welcomeSpan.classList.add('welcome__span')
+        welcomeSpan.innerHTML = `${this.user} `
+
+        welcomeMessage.appendChild(welcomeSpan)
+        
         this.userMenu.insertBefore(welcomeMessage, this.logOutBtn)
         this.userMenu.classList.add('logged')
 
@@ -183,17 +227,17 @@ class Game {
     startGame(){
 
         this.timer.restart()
-        
+        this.currentScore = 0
+        this.handleScore()
+
         this.difficultyContainer.classList.add('hidden')
         this.pausedMenu.classList.add('hidden') 
+        this.gameWon.classList.add('hidden')
 
         if (!this.difficulty){ // Hacemos la comprobacion, si no hay ninguno manda alerta al usuario para que seleccione dificultad
             alert('Por favor seleccione una dificultad')
         }
         
-        const gameBtnsContainer = document.querySelector('.game__btns')
-        gameBtnsContainer.classList.remove('hidden')
-
         const gameInfo = document.querySelector('.game__info')
         gameInfo.classList.remove('hidden')
         
@@ -246,6 +290,7 @@ class Game {
 
         this.currentScore = 0;
         this.handleScore()
+        this.pausedMenu.classList.add('hidden')
     }
 
     saveGame(){
@@ -256,7 +301,6 @@ class Game {
         }
 
         this.currentTime = this.timer.catch()
-
         this.usersGames = this.usersGames || {}
 
         let currentGrid = Array.from(this.grid.children).map(box => ({
@@ -267,7 +311,8 @@ class Game {
         this.usersGames[this.user] = {
             grid: currentGrid,
             score: this.currentScore,
-            time : this.currentTime
+            time : this.currentTime,
+            difficulty : this.difficulty
         }
         localStorage.setItem("usersGames", JSON.stringify(this.usersGames));
 
@@ -292,6 +337,7 @@ class Game {
         let splitTime = this.currentTime.split(':')
         this.timer.startFrom(splitTime[0], splitTime[1])
 
+
         
         let gridToLoad = this.usersGames[this.user]['grid']
         this.gameBox.createBoardFrom(gridToLoad)
@@ -299,6 +345,7 @@ class Game {
         this.boxes = Array.from(document.querySelectorAll('.box'));
 
         this.grid.innerHTML= ''
+        this.grid.classList.add(this.usersGames[this.user]['difficulty'])
 
         this.boxes.forEach((box) => {
             box.addEventListener('click', this.flipCard.bind(this));
@@ -315,49 +362,73 @@ class Game {
         switch(state){
             
             case'victory':
-                
-            break
+                this.gameWon.classList.remove('hidden')
+
+                if(!this.user){
+                    this.victoryTitleSpan.innerHTML = 'Usuario'
+                }else{
+                    this.victoryTitleSpan.innerHTML = `${this.user}`
+                }
+                this.resultScoreSpan.innerHTML = `${this.currentScore}`
+                this.resulTimeSpan.innerHTML = `${this.currentTime}`
+                this.resultDifficultySpan.innerHTML = `${this.difficulty}`  
+                break
             
             case'pause': 
-            this.pausedMenu.classList.remove('hidden')
+                this.pausedMenu.classList.remove('hidden')
 
-            const backClick = () => {
-                let splitTime = this.currentTime.split(':');
-                this.timer.startFrom(splitTime[0], splitTime[1]);
-                this.pausedMenu.classList.add('hidden');
-                this.backBtnPause.removeEventListener('click', backClick);
-            };
+                const backClick = () => {
+                    let splitTime = this.currentTime.split(':');
+                    this.timer.startFrom(splitTime[0], splitTime[1]);
+                    this.pausedMenu.classList.add('hidden');
+                    this.backBtnPause.removeEventListener('click', backClick);
+                };
 
-            this.backBtnPause.addEventListener('click', backClick);
-            break
+                this.backBtnPause.addEventListener('click', backClick);
+                break
         } 
+        console.log(this.currentTime)
     }
 
     storeUserData(){
 
-        // if(!this.user){
-        // this.user = prompt('Introduce tu nombre de usuario')
-        // }
+        if(!this.user){
+        this.user = prompt('Introduce tu nombre de usuario')
+        }
 
-        this.user = 'Jesus'
-
-        let highestScore = users[this.user]['highestScore'][this.difficulty]
-        let fastestTime = users[this.user]['fastestTime'][this.difficulty]
-
-        if(!users || !users[this.user]){
+        if(!this.usersData || !this.usersData[this.user]){
             alert('No existe ningun usuario con ese nombre')
+            return
+        }
+
+        let highestScore = this.usersData[this.user]['highestScore'][this.difficulty]
+        
+        let fastestTime = this.usersData[this.user]['fastestTime'][this.difficulty]
+
+        let fastestToArray = fastestTime.split(':').map(digit => digit = parseInt(digit));
+
+        let splitTime = this.currentTime.split(':').map(digit => digit = parseInt(digit));
+
+        if (fastestToArray[0] < splitTime[0]){
+
+            this.usersData[this.user]['fastestTime'][this.difficulty] = this.currentTime
+            (console.log('hiciste mas minutes'))
+
+        }else if(fastestToArray[0] == splitTime[0]){
+
+            console.log('tienes los mismos minutos')
+
+            if(fastestToArray[0] < splitTime[1]){
+                console.log('hiciste mas segundos')
+                this.usersData[this.user]['fastestTime'][this.difficulty] = this.currentTime;
+            }
         }
 
         if (this.currentScore > highestScore){
-            highestScore = this.currentScore
+            this.usersData[this.user]['highestScore'][this.difficulty] = this.currentScore;
         }
 
-        if (this.currentTime > fastestTime){
-            fastestTime = this.currentTime
-        }
-
-        localStorage.setItem("users", JSON.stringify(users));
-
+        localStorage.setItem("users", JSON.stringify(this.usersData));
 
     }
 
@@ -417,31 +488,38 @@ class Game {
     }
 
     handleError(targetBox) {
-        this.currentScore -= 10;
-        this.handleScore()
 
+        if(this.currentScore > 0){
+            this.currentScore -= 10;
+            this.handleScore()  
+        }
+        
         this.active.classList.remove('active');
+        this.active.classList.add('error')
         this.active.setAttribute('draggable', 'false');
         
+        targetBox.classList.add('error')
+
         this.timeoutID = setTimeout(() => {
             this.active.classList.add('black');
+            this.active.classList.remove('error');
+
             targetBox.classList.add('black');
+            targetBox.classList.remove('error');
             this.active = null;
         }, 800);
     }
 
     handleScore(){
-        this.scoreSpan.innerHTML = `Puntuación: ${this.currentScore}`;
+        this.scoreSpan.innerHTML = `PUNTUACION: ${this.currentScore}`;
     }
 
     checkWin(){
-        if(this.numCorrects === 1){
+        if(this.numCorrects === this.numBoxes/2){
             this.pausedGameState = 'victory';
             this.pausedGameMenu(this.pausedGameState)
         }
     }
-
-
 }
 
 export default Game;

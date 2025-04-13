@@ -51,6 +51,7 @@ class Timer{
         this.clock.textContent = 
             `${this.minutes.toString().padStart(2,'0')} : ${this.seconds.toString().padStart(2,'0')}`;
     }
+
 }
 
 export default Timer;

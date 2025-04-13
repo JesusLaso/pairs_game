@@ -1,8 +1,33 @@
+@use './fonts' as *;
+
+*{
+    font-family: 'Space Grotesk';
+    color: #6b6969;
+}
 html, body {
     height: 100%;
     margin: 0;
     padding: 0 1em 0 1em ;
   }
+button{
+    width: fit-content;
+    border: none;
+    background: none;
+    position: relative;
+}
+button::after{
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 0;
+    height: 3px;
+    background-color: #00E5FF;
+    transition: 0.15s ease-in-out;
+}
+button:hover::after{
+    width: 100%;
+}
 
 .page{
     display: flex;
@@ -16,13 +41,31 @@ html, body {
     justify-content: space-between;
     align-items: center;
 }
+.logo{
+    font-family: 'Cravend';
+    font-size: 2em;
+}
+.logo__span{
+    font-family: 'Cravend';
+    color: #4acbd9;
+}
 .user__menu{
     display: flex;
-    width: 10%;
+    width: 15%;
     justify-content: space-between;
+    align-items: center;
     &.logged{
-        width: 18%;
+        width: 20%;
     }
+}
+.user__btn{
+    font-size: 1em;
+    font-weight: bold;
+    max-height: fit-content;
+}
+.welcome__span{
+    font-family: 'Cravend';
+    color: #4acbd9;
 }
 .newgame__menu{
     margin-top: 14em;
@@ -38,10 +81,98 @@ html, body {
 }
 .game__info{
     font-size: 20px;
-    padding: 1em;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     margin-bottom: 1em;
+}
+.score{
+    font-weight: bold;
+    font-size: 1.2em;
+}
+.clock{
+    font-family: 'DS-Digital';
+    font-size: 1.5em;
+    font-weight: bold;
+}
+.game__btn{
+    font-size: 1.2em;
+    font-weight: bold;
+}
+.game__paused{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+.paused__btns{
+    display: flex;
+    width: 60%;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+    background-color: #121212a0 ;
+    border-radius: 40px;
+}
+.game__btn{
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #39d7e9;
+}
+.game__won{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+.container__victory{
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    background-color: #121212e5 ;
+    border-radius: 40px;
+    padding: 1em;
+    > *{
+        color: #e3e9ea;
+    }
+}
+.victory__titlespan{
+    color: #00E5FF;
+}
+.results__container{
+    text-align: center;
+    margin-bottom: 100px;
+}
+.results__title{
+    color: #e3e9ea;
+}
+.results{
+    display: flex;
+    color: #39d7e9;
+}
+.result{
+    width: 200px;
+    color: #39d7e9;
+    display: flex;
+    flex-direction: column;
+}
+.result__span{
+    margin-top: 0.5em;
+    color: #e3e9ea;
+}
+.victory__btns{
+    width: 50%;
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 50px;
+}
+.victory__btn{
+    color: #e3e9ea;
 }
 .grid{
     width: 50em;
@@ -74,34 +205,47 @@ html, body {
         }
     }
 }
-.game__btns{
-    padding: 1em;
-    display: flex;
-    justify-content: space-around;
-    margin-top: 1em;
-}
-.game__paused{
-    background-color: green;
-    opacity: 70%;
-    width: 100%;
-    height: 50%;
-    text-align: center;
-    position: absolute;
-    height: 90%;
-    top: 50px;
-}
 
 // Estilos para clases dinamicas 
 
 .hidden{
     display: none;
 }
-.active{
-    transform: scale(1.04);
+.box{
+    border-radius: 15%;
 }
 .black{
-    background-color: black!important;
+    background-color: rgba(0, 0, 0, 0.837)!important;
 }
-.box{
-    
+.active{
+    animation: expand 0.5s ease;
 }
+.correct{
+    animation: bounce 0.5s ease-in-out;
+}
+.error{
+    animation: shake 0.5s ease-in-out
+}
+
+@keyframes expand{
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+@keyframes bounce {
+    0%   { transform: translateY(0); }
+    30%  { transform: translateY(-15px); }
+    50%  { transform: translateY(0); }
+    70%  { transform: translateY(-7px); }
+    100% { transform: translateY(0); }
+  }
+  @keyframes shake{
+    0%   { transform: translateX(0); }
+    15%  { transform: translateX(-15px); }
+    30%  { transform: translateX(0); }
+    50%  { transform: translateX(10px); }
+    60%  { transform: translateX(-7px); }
+    70%  { transform: translateX(7px); }
+    100% { transform: translateX(0); }
+  
+  }

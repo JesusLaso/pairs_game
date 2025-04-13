@@ -49,6 +49,7 @@ class Box{
             newBox.classList.add('box');
             this.grid.appendChild(newBox);
         } 
+        return this.numBoxes
     }
 
     createBoardFrom(array){

@@ -9,55 +9,72 @@
     <main class="page">
       
       <nav class="nav__menu ">
-        <h1>PairsHunters</h1>
+        <h1 class="logo">Pairs<span class="logo__span">Hunters</span></h1>
         <div class="user__menu">
-          <button class="menu__btn login-btn">Iniciar Sesion</button>
-          <button class="menu__btn logout--btn hidden">Cerrar Sesion</button>
-          <button class="menu__btn signup-btn">Crear Cuenta</button>
+          <button class="user__btn login-btn" type="button">INICIAR SESION</button>
+          <button class="user__btn logout--btn hidden" type="button">CERRAR SESION</button>
+          <button class="user__btn signup-btn" type="button">CREAR CUENTA</button>
         </div>
       </nav>
 
       <div class="newgame__menu">
-        <button class="menu__btn newgame--btn">Nueva Partida</button>
-        <button class="menu__btn loadgame--btn">Cargar Partida</button>
+        <button class="newgame__btn newgame--btn" type="button">NUEVA PARTIDA</button>
+        <button class="newgame__btn loadgame--btn" type="button">CARGAR PARTIDA</button>
         
       </div>
 
       <div class="difficulty__container hidden">
-        <h2 class="difficulty__title">Seleciona la dificultad</h2>
+        <h2 class="difficulty__title">SELECCIONA LA DIFICULTAD</h2>
         <form action="#" class="difficulty__form">
   
-          <label for="facil">Facil</label>
+          <label for="facil">FACIL</label>
           <input type="radio" id="easy" name="difficulty" value="easy" >
   
-          <label for="medio">Medio</label>
+          <label for="medio">MEDIO</label>
           <input type="radio" id="medium" name="difficulty" value="medium">
   
-          <label for="dificil">Dificil</label>
+          <label for="dificil">DIFICIL</label>
           <input type="radio" id="hard" name="difficulty" value="hard">
   
-          <button class="form__btn btn" type="submit">Iniciar Juego</button>
-          <button class="back__btn--difficulty">Atras</button>
+          <button class="form__btn btn" type="submit">INICIAR JUEGO</button>
+          <button class="back__btn--difficulty" type="button">ATRAS</button>
         </form>
       </div>
 
       <div class="game">
 
         <div class="game__info hidden">
-          <span class="score">Puntuación: </span>
+          <span class="score">PUNTUACION: </span>
           <span class="clock">00:00</span>
-          </div>
-
-        <div class="game__grid grid " ></div>
-        <div class="game__btns hidden">
-          <button class="game__btn btn--pause" type="button">Pausar Juego</button>
+          <button class="game__btn btn--pause" type="button">PAUSAR JUEGO</button>
           <div class="game__paused hidden">
-            <button class="game__btn back__btn--pause">Volver al juego</button>
-            <button class="game__btn btn--restart" type="button">Reiniciar Juego</button>
-            <button class="game__btn btn--save" type="button">Guardar Partida</button>
-            <button class="game__btn btn--change" type="button">Cambiar Dificultad</button>
+            <div class="paused__btns">
+              <button class="game__btn back__btn--pause" type="button">VOLVER AL JUEGO</button>
+              <button class="game__btn btn--restart" type="button">REINICIAR JUEGO</button>
+              <button class="game__btn btn--save" type="button">GUARDAR PARTIDA</button>
+              <button class="game__btn btn--change" type="button">CAMBIAR DIFICULTAD</button>
+            </div>
+          </div>
+          <div class="game__won hidden">
+            <div class="container__victory">
+              <h2 class="victory__title">ENHORABUENA <span class="victory__titlespan"></span></h2>
+              <div class="results__container">
+                <h3 class="results__title">RESULTADOS</h3>
+                <div class="results">
+                  <p class="result ">PUNTUACION <span class="result__span result--score"></span></p>
+                  <p class="result ">TIEMPO <span class="result__span result--time"></span></p>
+                  <p class="result ">DIFICULTAD <span class="result__span result--difficulty"></span></p>
+                </div>
+              </div>
+              <div class="victory__btns">
+                <button class="victory__btn victory--newgame" type="button">NUEVA PARTIDA</button>
+                <button class="victory__btn victory--savescore" type="button">GUARDAR PUNTUACION</button>
+              </div>
+            </div>
           </div>
         </div>
+
+        <div class="game__grid grid " ></div>
       </div>
     </main>
 
