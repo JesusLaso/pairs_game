@@ -7,25 +7,28 @@
   </head>
   <body>
     <main class="page">
-  
-      <nav class="user__menu menu">
+      
+      <nav class="nav__menu ">
         <h1>PairsHunters</h1>
-        <button class="menu__btn login-btn">Iniciar Sesion</button>
-        <button class="menu__btn logout--btn hidden">Cerrar Sesion</button>
-        <button class="menu__btn signup-btn">Crear Cuenta</button>
+        <div class="user__menu">
+          <button class="menu__btn login-btn">Iniciar Sesion</button>
+          <button class="menu__btn logout--btn hidden">Cerrar Sesion</button>
+          <button class="menu__btn signup-btn">Crear Cuenta</button>
+        </div>
       </nav>
 
       <div class="newgame__menu">
         <button class="menu__btn newgame--btn">Nueva Partida</button>
         <button class="menu__btn loadgame--btn">Cargar Partida</button>
+        
       </div>
 
-      <div class="dificulty__container hidden">
-        <h2 class="dificulty__title">Seleciona la dificultad</h2>
-        <form action="#" class="dificulty__form">
+      <div class="difficulty__container hidden">
+        <h2 class="difficulty__title">Seleciona la dificultad</h2>
+        <form action="#" class="difficulty__form">
   
           <label for="facil">Facil</label>
-          <input type="radio" id="easy" name="difficulty" value="easy">
+          <input type="radio" id="easy" name="difficulty" value="easy" >
   
           <label for="medio">Medio</label>
           <input type="radio" id="medium" name="difficulty" value="medium">
@@ -34,22 +37,30 @@
           <input type="radio" id="hard" name="difficulty" value="hard">
   
           <button class="form__btn btn" type="submit">Iniciar Juego</button>
+          <button class="back__btn--difficulty">Atras</button>
         </form>
       </div>
 
       <div class="game">
-        <div class="game__grid grid"></div>
-        <div class="game__btns hidden">
-          <button class="game__btn btn--restart" type="button">Reiniciar Juego</button>
-          <button class="game__btn btn--change" type="button">Cambiar Dificultad</button>
-          <button class="game__btn btn--save" type="button">Guardar Partida</button>
-        </div>
+
         <div class="game__info hidden">
-        <span class="clock">00:00</span>
-        <span class="score"></span>
+          <span class="score">Puntuación: </span>
+          <span class="clock">00:00</span>
+          </div>
+
+        <div class="game__grid grid " ></div>
+        <div class="game__btns hidden">
+          <button class="game__btn btn--pause" type="button">Pausar Juego</button>
+          <div class="game__paused hidden">
+            <button class="game__btn back__btn--pause">Volver al juego</button>
+            <button class="game__btn btn--restart" type="button">Reiniciar Juego</button>
+            <button class="game__btn btn--save" type="button">Guardar Partida</button>
+            <button class="game__btn btn--change" type="button">Cambiar Dificultad</button>
+          </div>
         </div>
       </div>
     </main>
+
     <script type="module" src="src/main.js"></script>
   </body>
 </html>
